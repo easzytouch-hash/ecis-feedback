@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Client Satisfaction Survey — ECIS Ink Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --gold: #c8973a;
+    --gold-light: #e8b85a;
+    --cream: #faf8f4;
+    --mid: #6b6560;
+    --border: #ddd8d0;
+    --white: #ffffff;
+    --success: #2d7a4a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--ink); min-height: 100vh; }
+
+  .header { background: var(--ink); padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; position: relative; overflow: hidden; }
+  .header::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: linear-gradient(180deg, var(--gold), var(--gold-light)); }
+  .header-left { display: flex; align-items: center; gap: 18px; }
+  .logo-mark { width: 52px; height: 52px; border: 2px solid var(--gold); border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1px; }
+  .logo-mark span { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 13px; font-weight: 700; letter-spacing: 1px; line-height: 1; }
+  .logo-mark span.sub { font-size: 9px; color: var(--gold-light); font-family: 'DM Sans', sans-serif; }
+  .header-title h1 { font-family: 'Playfair Display', serif; color: var(--white); font-size: 20px; font-weight: 600; }
+  .header-title p { color: var(--gold-light); font-size: 12px; font-weight: 300; letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+  .header-badge { background: rgba(200,151,58,0.15); border: 1px solid var(--gold); color: var(--gold-light); padding: 6px 16px; border-radius: 20px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; }
+
+  .hero-band { background: linear-gradient(135deg, #1a1d26 0%, #0f1117 60%, #1e1610 100%); padding: 44px 40px 40px; position: relative; overflow: hidden; }
+  .hero-band::after { content: ''; position: absolute; right: -60px; top: -60px; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(200,151,58,0.12) 0%, transparent 70%); }
+  .hero-band h2 { font-family: 'Playfair Display', serif; color: var(--white); font-size: 30px; font-weight: 700; max-width: 560px; line-height: 1.3; }
+  .hero-band h2 em { color: var(--gold-light); font-style: normal; }
+  .hero-band p { color: rgba(255,255,255,0.65); font-size: 14px; margin-top: 12px; max-width: 520px; line-height: 1.65; font-weight: 300; }
+  .divider-gold { width: 60px; height: 3px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); margin: 16px 0; border-radius: 2px; }
+
+  .form-wrap { max-width: 780px; margin: 0 auto; padding: 40px 24px 60px; }
+
+  .section-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 24px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+  .section-head { background: var(--ink); padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
+  .section-num { width: 26px; height: 26px; border-radius: 50%; background: var(--gold); color: var(--ink); font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .section-head h3 { font-family: 'Playfair Display', serif; color: var(--white); font-size: 15px; font-weight: 600; }
+  .section-body { padding: 24px; }
+
+  .field { margin-bottom: 20px; }
+  .field:last-child { margin-bottom: 0; }
+  label { display: block; font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 7px; }
+  label .req { color: var(--gold); margin-left: 2px; }
+  label .hint { font-weight: 300; color: var(--mid); font-size: 11.5px; margin-left: 6px; font-style: italic; }
+
+  input[type="text"], input[type="email"], input[type="tel"], select, textarea {
+    width: 100%; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 6px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--ink); background: var(--cream);
+    transition: border-color 0.2s, box-shadow 0.2s; outline: none; appearance: none;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200,151,58,0.12); background: var(--white); }
+  textarea { resize: vertical; min-height: 90px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 560px) { .field-row { grid-template-columns: 1fr; } }
+
+  .handler-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; }
+  @media (max-width:500px) { .handler-grid { grid-column: 1fr; } }
+  .handler-card { position: relative; cursor: pointer; }
+  .handler-card input[type="checkbox"] { display: none; }
+  .handler-label { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 2px solid var(--border); border-radius: 8px; cursor: pointer; transition: border-color 0.2s, background 0.2s; background: var(--cream); }
+  .handler-card input:checked + .handler-label { border-color: var(--gold); background: rgba(200,151,58,0.07); }
+  .handler-icon { width: 36px; height: 36px; border-radius: 50%; background: var(--ink); color: var(--gold); font-family: 'Playfair Display', serif; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .handler-card input:checked + .handler-label .handler-icon { background: var(--gold); color: var(--ink); }
+  .handler-name { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+  .handler-role { font-size: 11px; color: var(--mid); font-weight: 300; margin-top: 1px; }
+  .checkmark { margin-left: auto; width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+  .handler-card input:checked + .handler-label .checkmark { background: var(--gold); border-color: var(--gold); }
+  .handler-card input:checked + .handler-label .checkmark::after { content: '✓'; color: var(--ink); font-size: 11px; font-weight: 700; }
+
+  .handler-card.other-card { grid-column: 1 / -1; }
+  .other-inner { border: 2px dashed var(--border); border-radius: 8px; padding: 14px 16px; background: var(--cream); transition: border-color 0.2s; }
+  .other-inner.active { border-color: var(--gold); background: rgba(200,151,58,0.05); }
+  .other-top { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+  .other-icon { width: 36px; height: 36px; border-radius: 50%; background: #2a2d38; color: #aaa; font-size: 18px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 700; }
+  .other-text .handler-name { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+  .other-text .handler-role { font-size: 11px; color: var(--mid); font-weight: 300; margin-top: 1px; }
+  .other-toggle { margin-left: auto; width: 18px; height: 18px; border: 2px solid var(--border); border-radius: 4px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
+  .other-toggle.on { background: var(--gold); border-color: var(--gold); }
+  .other-toggle.on::after { content: '✓'; color: var(--ink); font-size: 11px; font-weight: 700; }
+  .other-fields { display: none; margin-top: 14px; border-top: 1px solid var(--border); padding-top: 14px; }
+  .other-fields.show { display: block; }
+
+  .notify-badge { display: inline-flex; align-items: center; gap: 6px; background: #fff8ec; border: 1px solid #f0c060; color: #7a5000; font-size: 11.5px; padding: 5px 12px; border-radius: 20px; margin-top: 10px; font-weight: 500; }
+
+  .star-group { display: flex; flex-direction: column; gap: 14px; }
+  .star-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; background: var(--cream); border: 1px solid var(--border); border-radius: 8px; gap: 12px; }
+  .star-label { font-size: 13px; font-weight: 500; color: var(--ink); flex: 1; min-width: 0; }
+  .star-label span { display: block; font-size: 11px; color: var(--mid); font-weight: 300; margin-top: 1px; }
+  .star-widget { display: flex; gap: 4px; direction: rtl; flex-shrink: 0; }
+  .star-widget input[type="radio"] { display: none; }
+  .star-widget label { font-size: 24px; color: #d0cbc4; cursor: pointer; transition: color 0.12s; margin: 0; padding: 0; font-weight: normal; }
+  .star-widget label:hover, .star-widget label:hover ~ label { color: var(--gold); }
+  .star-widget input[type="radio"]:checked ~ label { color: var(--gold); }
+
+  .nps-wrap { display: flex; flex-direction: column; gap: 8px; }
+  .nps-scale { display: flex; gap: 5px; }
+  .nps-btn { flex: 1; padding: 10px 0; border: 1.5px solid var(--border); background: var(--cream); border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; color: var(--ink); font-family: 'DM Sans', sans-serif; }
+  .nps-btn:hover { border-color: var(--gold); background: rgba(200,151,58,0.08); }
+  .nps-btn.active { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+  .nps-labels { display: flex; justify-content: space-between; }
+  .nps-labels span { font-size: 11px; color: var(--mid); }
+
+  .radio-group { display: flex; flex-direction: column; gap: 8px; }
+  .radio-opt { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 6px; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+  .radio-opt:hover { border-color: var(--gold); background: rgba(200,151,58,0.05); }
+  .radio-opt input { accent-color: var(--gold); width: 15px; height: 15px; cursor: pointer; }
+  .radio-opt span { font-size: 13.5px; font-weight: 400; }
+  .radio-opt.selected { border-color: var(--gold); background: rgba(200,151,58,0.07); }
+
+  .check-group { display: flex; flex-direction: column; gap: 8px; }
+  .check-opt { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 6px; cursor: pointer; transition: all 0.15s; }
+  .check-opt:hover { border-color: var(--gold); }
+  .check-opt input { accent-color: var(--gold); width: 15px; height: 15px; cursor: pointer; }
+  .check-opt span { font-size: 13.5px; }
+
+  .submit-wrap { text-align: center; margin-top: 16px; padding: 32px 24px; background: var(--white); border: 1px solid var(--border); border-radius: 10px; box-shadow: 0 2px 12px rgba(0,0,0,0.05); }
+  .submit-wrap p { font-size: 13px; color: var(--mid); margin-bottom: 20px; max-width: 440px; margin-inline: auto; line-height: 1.6; }
+  .btn-submit { background: var(--ink); color: var(--white); border: none; padding: 15px 52px; border-radius: 6px; font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; cursor: pointer; letter-spacing: 0.4px; transition: all 0.2s; }
+  .btn-submit:hover { background: #1e2130; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+  .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .error-msg { display: none; background: #fff0f0; border: 1.5px solid #e05050; border-radius: 8px; padding: 14px 18px; margin-top: 16px; font-size: 13px; color: #a02020; text-align: center; }
+  .success-banner { display: none; background: #f0faf4; border: 1.5px solid #2d7a4a; border-radius: 10px; padding: 32px; text-align: center; margin-top: 24px; }
+  .success-banner .icon { font-size: 48px; margin-bottom: 12px; }
+  .success-banner h3 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--success); }
+  .success-banner p { color: var(--mid); font-size: 14px; margin-top: 8px; }
+
+  .page-footer { background: var(--ink); color: rgba(255,255,255,0.45); text-align: center; padding: 20px; font-size: 12px; letter-spacing: 0.5px; }
+  .page-footer a { color: var(--gold-light); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ▶▶ STEP 1: PASTE YOUR APPS SCRIPT WEB APP URL BELOW ◀◀
+     Replace the placeholder with your real URL from:
+     script.google.com → Deploy → Manage Deployments → copy URL
+     ═══════════════════════════════════════════════════════════ -->
+<script>
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz-57HncinRL5Jo8ddbYzsNoDNULTPFwgoyTYv03jwtbPqt1zt8HmOaLVQ2puJ4EVGbcg/exec';
+  // ↑↑ REPLACE THIS URL — everything else is already working ↑↑
+</script>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <div class="logo-mark"><span>ECIS</span><span class="sub">INK</span></div>
+    <div class="header-title">
+      <h1>ECIS Ink Services</h1>
+      <p>Academic &amp; Professional Research Support · Est. 2014</p>
+    </div>
+  </div>
+  <div class="header-badge">Client Survey</div>
+</div>
+
+<!-- HERO -->
+<div class="hero-band">
+  <h2>Your Experience <em>Matters to Us</em></h2>
+  <div class="divider-gold"></div>
+  <p>At ECIS Ink Services, we are committed to delivering excellence in every engagement. This short survey helps us understand your experience, recognise our team members, and continuously raise our standards. It takes approximately 5–7 minutes to complete.</p>
+</div>
+
+<div class="form-wrap">
+<form id="ecisForm" novalidate>
+
+  <!-- S1: Client Info -->
+  <div class="section-card">
+    <div class="section-head"><div class="section-num">1</div><h3>Client Information</h3></div>
+    <div class="section-body">
+      <div class="field-row">
+        <div class="field">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" name="client_name" placeholder="e.g. Aminu Bello" required>
+        </div>
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" name="client_email" placeholder="e.g. name@email.com" required>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Phone Number <span class="hint">(optional)</span></label>
+          <input type="tel" name="client_phone" placeholder="+234 ...">
+        </div>
+        <div class="field">
+          <label>Date of Survey</label>
+          <input type="text" name="survey_date" id="surveyDate" readonly>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S2: Service Details -->
+  <div class="section-card">
+    <div class="section-head"><div class="section-num">2</div><h3>Service Details</h3></div>
+    <div class="section-body">
+      <div class="field">
+        <label>Which service(s) did we provide for you? <span class="req">*</span> <span class="hint">tick all that apply</span></label>
+        <div class="check-group">
+          <label class="check-opt"><input type="checkbox" name="service" value="research_project"> <span>Academic Research Project / Dissertation / Thesis</span></label>
+          <label class="check-opt"><input type="checkbox" name="service" value="data_analysis"> <span>Data Analysis &amp; Interpretation</span></label>
+          <label class="check-opt"><input type="checkbox" name="service" value="fieldwork"> <span>Field Work &amp; Data Collection</span></label>
+          <label class="check-opt"><input type="checkbox" name="service" value="report_writing"> <span>Research Report Writing</span></label>
+          <label class="check-opt"><input type="checkbox" name="service" value="proofreading"> <span>Proofreading &amp; Editing</span></label>
+          <label class="check-opt"><input type="checkbox" name="service" value="critical_essay"> <span>Critical Assignment / Academic Essay / Seminar Paper</span></label>
+          <label class="check-opt"><input type="checkbox" name="service" value="plagiarism"> <span>Plagiarism Check</span></label>
+          <label class="check-opt"><input type="checkbox" name="service" value="digital_product"> <span>Digital Product (eBook / Online Course)</span></label>
+          <label class="check-opt"><input type="checkbox" name="service" value="workshop"> <span>Workshop / Practical Training Programme</span></label>
+          <label class="check-opt"><input type="checkbox" name="service" value="ai_cleaning"> <span>AI Content Cleaning</span></label>
+          <label class="check-opt"><input type="checkbox" name="service" value="resume_cv"> <span>Resume / CV Writing</span></label>
+          <label class="check-opt"><input type="checkbox" name="service" value="consultancy_call"> <span>Consultancy Call</span></label>
+          <label class="check-opt"><input type="checkbox" name="service" value="seminar_defence"> <span>Seminar Defence Presentation</span></label>
+          <label class="check-opt"><input type="checkbox" name="service" value="coaching_class"> <span>Coaching Class</span></label>
+          <label class="check-opt"><input type="checkbox" name="service" value="other_svc"> <span>Other</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label>How did you first hear about ECIS Ink Services? <span class="req">*</span></label>
+        <select name="referral_source" required>
+          <option value="">— Select one —</option>
+          <option>Referral from a friend or colleague</option>
+          <option>WhatsApp / Broadcast message</option>
+          <option>Social media (Instagram / Facebook / Twitter / X)</option>
+          <option>Google Search</option>
+          <option>Our website (ecisinkservices.com.ng)</option>
+          <option>Repeat engagement — I have used ECIS before</option>
+          <option>University campus notice board or flyer</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Was this your first time engaging ECIS Ink Services? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="first_time" value="yes"> <span>Yes — this was my first engagement</span></label>
+          <label class="radio-opt"><input type="radio" name="first_time" value="no"> <span>No — I have engaged ECIS Ink before</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S3: Handler Selection -->
+  <div class="section-card">
+    <div class="section-head"><div class="section-num">3</div><h3>Your Handler / Correspondent</h3></div>
+    <div class="section-body">
+      <div class="field">
+        <label>Which of our personnel handled your correspondence or service delivery? <span class="req">*</span> <span class="hint">tick all that apply</span></label>
+        <div class="handler-grid">
+
+          <div class="handler-card">
+            <input type="checkbox" name="handler" value="hassan" id="h_hassan">
+            <label class="handler-label" for="h_hassan">
+              <div class="handler-icon">MH</div>
+              <div><div class="handler-name">Mr Hassan</div><div class="handler-role">Client Handler</div></div>
+              <div class="checkmark"></div>
+            </label>
+          </div>
+
+          <div class="handler-card">
+            <input type="checkbox" name="handler" value="umar" id="h_umar">
+            <label class="handler-label" for="h_umar">
+              <div class="handler-icon">MU</div>
+              <div><div class="handler-name">Mr Umar</div><div class="handler-role">Client Handler</div></div>
+              <div class="checkmark"></div>
+            </label>
+          </div>
+
+          <div class="handler-card">
+            <input type="checkbox" name="handler" value="maryam" id="h_maryam">
+            <label class="handler-label" for="h_maryam">
+              <div class="handler-icon">MM</div>
+              <div><div class="handler-name">Mrs Maryam</div><div class="handler-role">Client Handler</div></div>
+              <div class="checkmark"></div>
+            </label>
+          </div>
+
+          <div class="handler-card">
+            <input type="checkbox" name="handler" value="taofeek" id="h_taofeek">
+            <label class="handler-label" for="h_taofeek">
+              <div class="handler-icon">MT</div>
+              <div><div class="handler-name">Mr Taofeek</div><div class="handler-role">Client Handler</div></div>
+              <div class="checkmark"></div>
+            </label>
+          </div>
+
+          <!-- OTHER HANDLER -->
+          <div class="handler-card other-card">
+            <div class="other-inner" id="otherInner">
+              <div class="other-top" id="otherToggleRow">
+                <div class="other-icon">+</div>
+                <div class="other-text">
+                  <div class="handler-name">Someone else handled my case</div>
+                  <div class="handler-role">Tap to enter their name — we'll log this as a new handler</div>
+                </div>
+                <div class="other-toggle" id="otherToggleMark"></div>
+              </div>
+              <div class="other-fields" id="otherFields">
+                <div class="field-row" style="margin-bottom:0;">
+                  <div class="field" style="margin-bottom:0;">
+                    <label style="font-size:12px;margin-bottom:5px;">Handler's Name <span class="req">*</span></label>
+                    <input type="text" id="otherHandlerName" name="other_handler_name" placeholder="e.g. Mr Emeka / Miss Fatima">
+                  </div>
+                  <div class="field" style="margin-bottom:0;">
+                    <label style="font-size:12px;margin-bottom:5px;">Their Role / Department <span class="hint">(optional)</span></label>
+                    <input type="text" id="otherHandlerRole" name="other_handler_role" placeholder="e.g. Research Writer, Editor...">
+                  </div>
+                </div>
+                <div class="notify-badge" id="notifyBadge" style="display:none;">
+                  &#128276; Admin notification will be sent to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4b2e2822382225200b2c262a222765282426">[email&#160;protected]</a> &amp; <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7b1e1a0801020f140e18133b1c161a121755181416">[email&#160;protected]</a> when you submit
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S4: Handler Rating -->
+  <div class="section-card">
+    <div class="section-head"><div class="section-num">4</div><h3>Rate Your Handler's Performance</h3></div>
+    <div class="section-body">
+      <p style="font-size:13px;color:var(--mid);margin-bottom:18px;">Rate your handler on each dimension. ★★★★★ = Excellent &nbsp;|&nbsp; ★ = Poor</p>
+      <div class="star-group">
+
+        <div class="star-item">
+          <div class="star-label">Responsiveness &amp; Communication<span>Did they reply promptly and keep you informed?</span></div>
+          <div class="star-widget">
+            <input type="radio" name="r_responsive" id="rr5" value="5"><label for="rr5">★</label>
+            <input type="radio" name="r_responsive" id="rr4" value="4"><label for="rr4">★</label>
+            <input type="radio" name="r_responsive" id="rr3" value="3"><label for="rr3">★</label>
+            <input type="radio" name="r_responsive" id="rr2" value="2"><label for="rr2">★</label>
+            <input type="radio" name="r_responsive" id="rr1" value="1"><label for="rr1">★</label>
+          </div>
+        </div>
+
+        <div class="star-item">
+          <div class="star-label">Professionalism &amp; Courtesy<span>Were they respectful, helpful, and professional?</span></div>
+          <div class="star-widget">
+            <input type="radio" name="r_professionalism" id="rp5" value="5"><label for="rp5">★</label>
+            <input type="radio" name="r_professionalism" id="rp4" value="4"><label for="rp4">★</label>
+            <input type="radio" name="r_professionalism" id="rp3" value="3"><label for="rp3">★</label>
+            <input type="radio" name="r_professionalism" id="rp2" value="2"><label for="rp2">★</label>
+            <input type="radio" name="r_professionalism" id="rp1" value="1"><label for="rp1">★</label>
+          </div>
+        </div>
+
+        <div class="star-item">
+          <div class="star-label">Understanding of Your Requirements<span>Did they grasp your needs accurately from the start?</span></div>
+          <div class="star-widget">
+            <input type="radio" name="r_understanding" id="ru5" value="5"><label for="ru5">★</label>
+            <input type="radio" name="r_understanding" id="ru4" value="4"><label for="ru4">★</label>
+            <input type="radio" name="r_understanding" id="ru3" value="3"><label for="ru3">★</label>
+            <input type="radio" name="r_understanding" id="ru2" value="2"><label for="ru2">★</label>
+            <input type="radio" name="r_understanding" id="ru1" value="1"><label for="ru1">★</label>
+          </div>
+        </div>
+
+        <div class="star-item">
+          <div class="star-label">Follow-Up &amp; Post-Delivery Support<span>Did they address post-delivery concerns promptly?</span></div>
+          <div class="star-widget">
+            <input type="radio" name="r_followup" id="rf5" value="5"><label for="rf5">★</label>
+            <input type="radio" name="r_followup" id="rf4" value="4"><label for="rf4">★</label>
+            <input type="radio" name="r_followup" id="rf3" value="3"><label for="rf3">★</label>
+            <input type="radio" name="r_followup" id="rf2" value="2"><label for="rf2">★</label>
+            <input type="radio" name="r_followup" id="rf1" value="1"><label for="rf1">★</label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- S5: Work Quality -->
+  <div class="section-card">
+    <div class="section-head"><div class="section-num">5</div><h3>Quality of Delivered Work</h3></div>
+    <div class="section-body">
+      <div class="star-group">
+
+        <div class="star-item">
+          <div class="star-label">Accuracy &amp; Depth of Content<span>Was the work thorough, accurate, and well-researched?</span></div>
+          <div class="star-widget">
+            <input type="radio" name="q_accuracy" id="qa5" value="5"><label for="qa5">★</label>
+            <input type="radio" name="q_accuracy" id="qa4" value="4"><label for="qa4">★</label>
+            <input type="radio" name="q_accuracy" id="qa3" value="3"><label for="qa3">★</label>
+            <input type="radio" name="q_accuracy" id="qa2" value="2"><label for="qa2">★</label>
+            <input type="radio" name="q_accuracy" id="qa1" value="1"><label for="qa1">★</label>
+          </div>
+        </div>
+
+        <div class="star-item">
+          <div class="star-label">Adherence to Your Instructions<span>Did the work follow your specifications and academic requirements?</span></div>
+          <div class="star-widget">
+            <input type="radio" name="q_adherence" id="qad5" value="5"><label for="qad5">★</label>
+            <input type="radio" name="q_adherence" id="qad4" value="4"><label for="qad4">★</label>
+            <input type="radio" name="q_adherence" id="qad3" value="3"><label for="qad3">★</label>
+            <input type="radio" name="q_adherence" id="qad2" value="2"><label for="qad2">★</label>
+            <input type="radio" name="q_adherence" id="qad1" value="1"><label for="qad1">★</label>
+          </div>
+        </div>
+
+        <div class="star-item">
+          <div class="star-label">Formatting, Structure &amp; Presentation<span>Was the work professionally formatted and well-organised?</span></div>
+          <div class="star-widget">
+            <input type="radio" name="q_format" id="qf5" value="5"><label for="qf5">★</label>
+            <input type="radio" name="q_format" id="qf4" value="4"><label for="qf4">★</label>
+            <input type="radio" name="q_format" id="qf3" value="3"><label for="qf3">★</label>
+            <input type="radio" name="q_format" id="qf2" value="2"><label for="qf2">★</label>
+            <input type="radio" name="q_format" id="qf1" value="1"><label for="qf1">★</label>
+          </div>
+        </div>
+
+        <div class="star-item">
+          <div class="star-label">Originality &amp; Avoidance of Plagiarism<span>Was the work original and free from unacceptable reproduction?</span></div>
+          <div class="star-widget">
+            <input type="radio" name="q_originality" id="qo5" value="5"><label for="qo5">★</label>
+            <input type="radio" name="q_originality" id="qo4" value="4"><label for="qo4">★</label>
+            <input type="radio" name="q_originality" id="qo3" value="3"><label for="qo3">★</label>
+            <input type="radio" name="q_originality" id="qo2" value="2"><label for="qo2">★</label>
+            <input type="radio" name="q_originality" id="qo1" value="1"><label for="qo1">★</label>
+          </div>
+        </div>
+
+        <div class="star-item">
+          <div class="star-label">Timeliness of Delivery<span>Was the work delivered within the agreed timeline?</span></div>
+          <div class="star-widget">
+            <input type="radio" name="q_timeliness" id="qt5" value="5"><label for="qt5">★</label>
+            <input type="radio" name="q_timeliness" id="qt4" value="4"><label for="qt4">★</label>
+            <input type="radio" name="q_timeliness" id="qt3" value="3"><label for="qt3">★</label>
+            <input type="radio" name="q_timeliness" id="qt2" value="2"><label for="qt2">★</label>
+            <input type="radio" name="q_timeliness" id="qt1" value="1"><label for="qt1">★</label>
+          </div>
+        </div>
+
+        <div class="star-item">
+          <div class="star-label">Value for Money<span>Was the quality of work worth the investment you made?</span></div>
+          <div class="star-widget">
+            <input type="radio" name="q_value" id="qv5" value="5"><label for="qv5">★</label>
+            <input type="radio" name="q_value" id="qv4" value="4"><label for="qv4">★</label>
+            <input type="radio" name="q_value" id="qv3" value="3"><label for="qv3">★</label>
+            <input type="radio" name="q_value" id="qv2" value="2"><label for="qv2">★</label>
+            <input type="radio" name="q_value" id="qv1" value="1"><label for="qv1">★</label>
+          </div>
+        </div>
+
+        <div class="star-item">
+          <div class="star-label">Revision &amp; Correction Handling<span>Were revision requests addressed promptly and satisfactorily?</span></div>
+          <div class="star-widget">
+            <input type="radio" name="q_revision" id="qr5" value="5"><label for="qr5">★</label>
+            <input type="radio" name="q_revision" id="qr4" value="4"><label for="qr4">★</label>
+            <input type="radio" name="q_revision" id="qr3" value="3"><label for="qr3">★</label>
+            <input type="radio" name="q_revision" id="qr2" value="2"><label for="qr2">★</label>
+            <input type="radio" name="q_revision" id="qr1" value="1"><label for="qr1">★</label>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- S6: Process -->
+  <div class="section-card">
+    <div class="section-head"><div class="section-num">6</div><h3>Overall Process Experience</h3></div>
+    <div class="section-body">
+      <div class="field">
+        <label>How would you rate the ease of placing your service request? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="ease_request" value="5"> <span>Very easy — the process was smooth and straightforward</span></label>
+          <label class="radio-opt"><input type="radio" name="ease_request" value="4"> <span>Easy — I got through without much difficulty</span></label>
+          <label class="radio-opt"><input type="radio" name="ease_request" value="3"> <span>Neutral — neither easy nor difficult</span></label>
+          <label class="radio-opt"><input type="radio" name="ease_request" value="2"> <span>Difficult — I had to follow up multiple times</span></label>
+          <label class="radio-opt"><input type="radio" name="ease_request" value="1"> <span>Very difficult — the process was confusing or frustrating</span></label>
+        </div>
+      </div>
+      <div class="field" style="margin-top:20px;">
+        <label>How confident were you in the confidentiality and privacy of your project?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="confidentiality" value="very_confident"> <span>Very confident — my work was handled with complete discretion</span></label>
+          <label class="radio-opt"><input type="radio" name="confidentiality" value="confident"> <span>Confident — I had no significant concerns</span></label>
+          <label class="radio-opt"><input type="radio" name="confidentiality" value="neutral"> <span>Neutral — I was not sure either way</span></label>
+          <label class="radio-opt"><input type="radio" name="confidentiality" value="not_confident"> <span>Not confident — I had concerns about my project's privacy</span></label>
+        </div>
+      </div>
+      <div class="field" style="margin-top:20px;">
+        <label>How would you describe the payment and pricing process?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="payment_exp" value="very_transparent"> <span>Very transparent — pricing was clear and fair from the start</span></label>
+          <label class="radio-opt"><input type="radio" name="payment_exp" value="transparent"> <span>Fairly transparent — I understood what I was paying for</span></label>
+          <label class="radio-opt"><input type="radio" name="payment_exp" value="neutral"> <span>Neutral</span></label>
+          <label class="radio-opt"><input type="radio" name="payment_exp" value="unclear"> <span>Somewhat unclear — I would have liked more upfront information</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S7: NPS -->
+  <div class="section-card">
+    <div class="section-head"><div class="section-num">7</div><h3>Overall Satisfaction &amp; Recommendation</h3></div>
+    <div class="section-body">
+      <div class="field">
+        <label>Overall, how satisfied are you with ECIS Ink Services? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="overall_sat" value="5"> <span>&#11088;&#11088;&#11088;&#11088;&#11088; — Very Satisfied</span></label>
+          <label class="radio-opt"><input type="radio" name="overall_sat" value="4"> <span>&#11088;&#11088;&#11088;&#11088; — Satisfied</span></label>
+          <label class="radio-opt"><input type="radio" name="overall_sat" value="3"> <span>&#11088;&#11088;&#11088; — Neutral</span></label>
+          <label class="radio-opt"><input type="radio" name="overall_sat" value="2"> <span>&#11088;&#11088; — Dissatisfied</span></label>
+          <label class="radio-opt"><input type="radio" name="overall_sat" value="1"> <span>&#11088; — Very Dissatisfied</span></label>
+        </div>
+      </div>
+      <div class="field" style="margin-top:24px;">
+        <label>On a scale of 0–10, how likely are you to recommend ECIS Ink Services to a colleague or friend? <span class="req">*</span></label>
+        <div class="nps-wrap">
+          <div class="nps-scale" id="npsScale">
+            <button type="button" class="nps-btn" data-val="0">0</button>
+            <button type="button" class="nps-btn" data-val="1">1</button>
+            <button type="button" class="nps-btn" data-val="2">2</button>
+            <button type="button" class="nps-btn" data-val="3">3</button>
+            <button type="button" class="nps-btn" data-val="4">4</button>
+            <button type="button" class="nps-btn" data-val="5">5</button>
+            <button type="button" class="nps-btn" data-val="6">6</button>
+            <button type="button" class="nps-btn" data-val="7">7</button>
+            <button type="button" class="nps-btn" data-val="8">8</button>
+            <button type="button" class="nps-btn" data-val="9">9</button>
+            <button type="button" class="nps-btn" data-val="10">10</button>
+          </div>
+          <div class="nps-labels"><span>0 — Not at all likely</span><span>10 — Extremely likely</span></div>
+          <input type="hidden" name="nps_score" id="npsHidden">
+        </div>
+      </div>
+      <div class="field" style="margin-top:20px;">
+        <label>Have you already referred anyone to ECIS Ink Services?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="has_referred" value="yes"> <span>Yes — I have recommended ECIS to others</span></label>
+          <label class="radio-opt"><input type="radio" name="has_referred" value="not_yet"> <span>Not yet, but I intend to</span></label>
+          <label class="radio-opt"><input type="radio" name="has_referred" value="no"> <span>No</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S8: Open Feedback -->
+  <div class="section-card">
+    <div class="section-head"><div class="section-num">8</div><h3>Open Feedback &amp; Suggestions</h3></div>
+    <div class="section-body">
+      <div class="field">
+        <label>What did we do exceptionally well? <span class="hint">(optional)</span></label>
+        <textarea name="what_went_well" placeholder="Tell us what impressed you most about our service…"></textarea>
+      </div>
+      <div class="field">
+        <label>What could we have done better? <span class="hint">(optional)</span></label>
+        <textarea name="what_to_improve" placeholder="Your honest feedback helps us improve…"></textarea>
+      </div>
+      <div class="field">
+        <label>Are there any services you would like ECIS Ink to introduce or expand? <span class="hint">(optional)</span></label>
+        <textarea name="new_services" placeholder="e.g. online tutorials, translation services, consultation calls…"></textarea>
+      </div>
+      <div class="field">
+        <label>Any other comments for ECIS Ink Services? <span class="hint">(optional)</span></label>
+        <textarea name="other_comments" placeholder="Anything else you'd like us to know…"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- S9: Testimonial -->
+  <div class="section-card">
+    <div class="section-head"><div class="section-num">9</div><h3>Testimonial &amp; Permission</h3></div>
+    <div class="section-body">
+      <div class="field">
+        <label>Would you be willing to share a brief testimonial for our website or marketing materials? <span class="hint">(optional)</span></label>
+        <textarea name="testimonial" placeholder="e.g. ECIS Ink delivered a thorough, well-structured thesis within the agreed timeline…"></textarea>
+      </div>
+      <div class="field">
+        <label>If you provided a testimonial above, may we use it for promotional purposes?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="testimonial_consent" value="yes_name"> <span>Yes — you may use it with my full name</span></label>
+          <label class="radio-opt"><input type="radio" name="testimonial_consent" value="yes_anon"> <span>Yes — but please keep it anonymous</span></label>
+          <label class="radio-opt"><input type="radio" name="testimonial_consent" value="no"> <span>No — please do not use it</span></label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Would you like to be contacted for future service offers or updates?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="contact_consent" value="yes"> <span>Yes — feel free to reach out via the details I provided</span></label>
+          <label class="radio-opt"><input type="radio" name="contact_consent" value="no"> <span>No — please do not contact me further</span></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="submit-wrap">
+    <p>Thank you for taking the time to complete this survey. Your feedback is reviewed by our leadership team and directly shapes how we grow at ECIS Ink Services.</p>
+    <button type="submit" class="btn-submit" id="submitBtn">Submit My Feedback</button>
+    <div class="error-msg" id="errorMsg">
+      Something went wrong while submitting. Please check your internet connection and try again.
+    </div>
+  </div>
+
+  <div class="success-banner" id="successBanner">
+    <div class="icon">&#9989;</div>
+    <h3>Thank You for Your Feedback!</h3>
+    <p>Your response has been saved. We appreciate your trust in ECIS Ink Services and look forward to serving you again.</p>
+  </div>
+
+</form>
+</div>
+
+<div class="page-footer">
+  &copy; 2026 ECIS Ink Services &nbsp;&middot;&nbsp; Academic &amp; Professional Research Support Since 2014 &nbsp;&middot;&nbsp;
+  <a href="https://ecisinkservices.com.ng" target="_blank">ecisinkservices.com.ng</a> &nbsp;&middot;&nbsp;
+  <a href="https://wa.me/2347042501744" target="_blank">WhatsApp Us</a>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// ── Auto-date
+document.getElementById('surveyDate').value =
+  new Date().toLocaleDateString('en-GB', {day:'2-digit', month:'long', year:'numeric'});
+
+// ── NPS buttons
+document.querySelectorAll('.nps-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.nps-btn').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('npsHidden').value = btn.getAttribute('data-val');
+  });
+});
+
+// ── Radio highlight
+document.querySelectorAll('.radio-opt input[type="radio"]').forEach(function(inp) {
+  inp.addEventListener('change', function() {
+    var grp = inp.closest('.radio-group');
+    if (grp) grp.querySelectorAll('.radio-opt').forEach(function(o){ o.classList.remove('selected'); });
+    inp.closest('.radio-opt').classList.add('selected');
+  });
+});
+
+// ── Other handler toggle
+var otherActive = false;
+document.getElementById('otherToggleRow').addEventListener('click', function() {
+  otherActive = !otherActive;
+  document.getElementById('otherFields').classList.toggle('show', otherActive);
+  document.getElementById('otherInner').classList.toggle('active', otherActive);
+  document.getElementById('otherToggleMark').classList.toggle('on', otherActive);
+});
+document.getElementById('otherHandlerName').addEventListener('input', function() {
+  document.getElementById('notifyBadge').style.display = this.value.trim() ? 'inline-flex' : 'none';
+});
+
+// ── Collect all form data into one object
+function collectFormData() {
+  var f    = document.getElementById('ecisForm');
+  var data = { action: 'submission' };
+
+  // Text / email / tel / select / textarea fields
+  f.querySelectorAll('input[name]:not([type="radio"]):not([type="checkbox"]):not([type="hidden"]), select[name], textarea[name]').forEach(function(el) {
+    data[el.name] = el.value;
+  });
+
+  // Hidden NPS
+  data.nps_score = document.getElementById('npsHidden').value;
+
+  // Radio buttons — pick the checked one per name
+  var radioNames = {};
+  f.querySelectorAll('input[type="radio"]').forEach(function(r){ radioNames[r.name] = true; });
+  Object.keys(radioNames).forEach(function(name) {
+    var checked = f.querySelector('input[type="radio"][name="' + name + '"]:checked');
+    data[name] = checked ? checked.value : '';
+  });
+
+  // Checkboxes — collect all checked values into an array
+  var checkNames = {};
+  f.querySelectorAll('input[type="checkbox"]').forEach(function(c){ checkNames[c.name] = true; });
+  Object.keys(checkNames).forEach(function(name) {
+    var vals = [];
+    f.querySelectorAll('input[type="checkbox"][name="' + name + '"]:checked').forEach(function(c){ vals.push(c.value); });
+    data[name] = vals;
+  });
+
+  return data;
+}
+
+// ── FORM SUBMIT — sends ALL data to Apps Script
+document.getElementById('ecisForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  var btn      = document.getElementById('submitBtn');
+  var errorMsg = document.getElementById('errorMsg');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+  errorMsg.style.display = 'none';
+
+  var formData         = collectFormData();
+  var newHandlerName   = document.getElementById('otherHandlerName').value.trim();
+  var newHandlerRole   = document.getElementById('otherHandlerRole').value.trim();
+
+  // Mark as new-handler alert if client filled in an unknown handler
+  if (newHandlerName) {
+    formData.other_handler_name = newHandlerName;
+    formData.other_handler_role = newHandlerRole;
+    formData.has_new_handler    = true;
+  }
+
+  // Send everything to Apps Script in one POST
+  fetch(APPS_SCRIPT_URL, {
+    method  : 'POST',
+    mode    : 'no-cors',   // required for Apps Script cross-origin calls
+    headers : { 'Content-Type': 'application/json' },
+    body    : JSON.stringify(formData)
+  })
+  .then(function() {
+    // no-cors returns opaque response — we treat reaching this point as success
+    btn.textContent = 'Submitted ✓';
+    document.getElementById('successBanner').style.display = 'block';
+    docum
